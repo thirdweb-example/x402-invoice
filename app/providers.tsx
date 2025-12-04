@@ -12,7 +12,7 @@ const client = createThirdwebClient({
 
 export function ThirdwebProvider({ children }: { children: React.ReactNode }) {
   return (
-    <ThirdwebProviderClient client={client} activeChain={arbitrum}>
+    <ThirdwebProviderClient>
       {children}
     </ThirdwebProviderClient>
   );
