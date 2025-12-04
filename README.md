@@ -1,19 +1,19 @@
-# BasePay Invoice
+# x402 Invoice
 
-A simple Next.js application for creating and paying invoices on the Base network using Thirdweb's X402 payment system.
+A simple Next.js application for creating and paying invoices on the Arb network using thirdweb's X402 payment system.
 
 ## Features
 
 - 🧾 Create invoices with customer details
-- 💰 Pay invoices directly on Base network using Thirdweb
+- 💰 Pay invoices directly on Arb network using thirdweb
 - 📊 Dashboard to view all invoices
 - ✅ Payment confirmation with transaction details
-- 🔗 Direct links to BaseScan for transaction verification
+- 🔗 Direct links to ArbScan for transaction verification
 
 ## Tech Stack
 
 - **Next.js 14** - React framework with App Router
-- **Thirdweb** - Web3 SDK for wallet connections and payments
+- **thirdweb** - Web3 SDK for wallet connections and payments
 - **TailwindCSS** - Styling
 - **shadcn/ui** - UI components
 - **MongoDB** - Database for invoice storage
@@ -45,8 +45,8 @@ npm run dev
 
 1. **Create Invoice**: Navigate to `/new` and fill in the invoice details
 2. **View Invoice**: Share the invoice link `/invoice/[id]` with the customer
-3. **Pay Invoice**: Customer connects wallet and clicks "Pay with Base"
-4. **Success**: After payment, view transaction details on BaseScan
+3. **Pay Invoice**: Customer connects wallet and clicks "Pay with Arb"
+4. **Success**: After payment, view transaction details on ArbScan
 
 ## Project Structure
 
@@ -69,7 +69,6 @@ npm run dev
 ## Notes
 
 - Invoices are stored in MongoDB database
-- The seller is hardcoded as "Yash" (can be customized)
-- Payments use Thirdweb's X402 payment system
-- All transactions are on Base network
+- Payments use thirdweb's X402 payment system
+- All transactions are on Arb network
 
