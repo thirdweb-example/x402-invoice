@@ -39,6 +39,15 @@ export async function getInvoices(): Promise<Invoice[]> {
   });
 }
 
+export async function getInvoicesByWallet(walletAddress: string): Promise<Invoice[]> {
+  const collection = await getCollection();
+  const invoices = await collection.find({ sellerWalletAddress: walletAddress }).sort({ createdAt: -1 }).toArray();
+  return invoices.map((inv: any) => {
+    const { _id, ...rest } = inv;
+    return rest as Invoice;
+  });
+}
+
 export async function getInvoice(id: string): Promise<Invoice | null> {
   const collection = await getCollection();
   const invoice = await collection.findOne({ id });

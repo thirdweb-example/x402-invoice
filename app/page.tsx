@@ -1,13 +1,48 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { getInvoices } from "@/lib/invoices";
 import { FileText, Plus, CheckCircle2, Clock, Eye } from "lucide-react";
 import { InvoiceCardActions } from "@/components/invoice-card-actions";
 import { InvoiceShareButton } from "@/components/invoice-share-button";
+import { useActiveAccount } from "thirdweb/react";
+import { Invoice } from "@/lib/invoices";
 
-export default async function HomePage() {
-  const invoices = await getInvoices();
+export default function HomePage() {
+  const account = useActiveAccount();
+  const [invoices, setInvoices] = useState<Invoice[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchInvoices = async () => {
+      if (!account?.address) {
+        setInvoices([]);
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        const response = await fetch(`/api/invoices?walletAddress=${account.address}`);
+        if (response.ok) {
+          const data = await response.json();
+          setInvoices(data);
+        } else {
+          console.error("Failed to fetch invoices");
+          setInvoices([]);
+        }
+      } catch (error) {
+        console.error("Error fetching invoices:", error);
+        setInvoices([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchInvoices();
+  }, [account?.address]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
@@ -29,7 +64,22 @@ export default async function HomePage() {
           </Link>
         </div>
 
-        {invoices.length === 0 ? (
+        {!account?.address ? (
+          <Card>
+            <CardContent className="flex flex-col items-center justify-center py-12">
+              <FileText className="h-12 w-12 text-gray-400 mb-4" />
+              <p className="text-gray-500 dark:text-gray-400">
+                Please connect your wallet to view your invoices
+              </p>
+            </CardContent>
+          </Card>
+        ) : loading ? (
+          <Card>
+            <CardContent className="flex flex-col items-center justify-center py-12">
+              <p className="text-gray-500 dark:text-gray-400">Loading invoices...</p>
+            </CardContent>
+          </Card>
+        ) : invoices.length === 0 ? (
           <Card>
             <CardContent className="flex flex-col items-center justify-center py-12">
               <FileText className="h-12 w-12 text-gray-400 mb-4" />

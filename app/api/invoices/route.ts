@@ -1,15 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createInvoice, deleteInvoice, getInvoice } from "@/lib/invoices";
+import { createInvoice, deleteInvoice, getInvoice, getInvoicesByWallet } from "@/lib/invoices";
 import { createCustomer, getCustomer } from "@/lib/customers";
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get("id");
+    const walletAddress = searchParams.get("walletAddress");
 
+    // If walletAddress is provided, return invoices for that wallet
+    if (walletAddress) {
+      const invoices = await getInvoicesByWallet(walletAddress);
+      return NextResponse.json(invoices);
+    }
+
+    // Otherwise, require invoice ID
     if (!id) {
       return NextResponse.json(
-        { error: "Missing invoice ID" },
+        { error: "Missing invoice ID or wallet address" },
         { status: 400 }
       );
     }
